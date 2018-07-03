@@ -8,6 +8,6 @@ namespace HangfireService.Contracts
 {
     public interface IPluginHandler
     {
-        void Handle(params object[] Parameters);
+        Task Handle();
     }
 }

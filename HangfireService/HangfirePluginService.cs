@@ -5,17 +5,15 @@ using HangfireService.Contracts;
 using Microsoft.Owin.Hosting;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.Data;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace HangfireService
 {
@@ -60,12 +58,22 @@ namespace HangfireService
         private void ServiceThreadFunc()
         {
             var uri = ConfigurationManager.AppSettings["HangfireUri"];
+            var pluginPath = ConfigurationManager.AppSettings["PluginDirectory"];
+
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => {
+                var asmName = new AssemblyName(args.Name);
+                var plugin = Path.Combine(pluginPath, asmName.Name + ".dll");
+                if (File.Exists(plugin))
+                    return Assembly.LoadFrom(plugin);
+                return null;
+            };
 
             using (var webApp = WebApp.Start<OwinStartup>(uri))
             {
+
                 var manager = new RecurringJobManager();
 
-                InitializeCatalog();
+                InitializeCatalog(pluginPath);
                 LoadPlugins(manager);
 
                 logger.Info("Web Application listening.");
@@ -75,16 +83,14 @@ namespace HangfireService
 
         }
 
-        private void InitializeCatalog()
+        private void InitializeCatalog(string pluginPath)
         {
             var catalog = new AggregateCatalog();
 
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(HangfirePluginService).Assembly));
 
-            var pluginPath = ConfigurationManager.AppSettings["PluginDirectory"];
             catalog.Catalogs.Add(new DirectoryCatalog(pluginPath, "*.dll"));
             _container = new CompositionContainer(catalog);
-
 
             logger.Info($"Loading plugins from {pluginPath}.");
 
@@ -106,6 +112,8 @@ namespace HangfireService
 
             foreach (var handler in _handlers)
             {
+                IPluginHandler handlerInterface = handler.Value;
+
                 var job = Job.FromExpression(() => handler.Value.Handle());
 
                 var cronExpression = string.Empty;

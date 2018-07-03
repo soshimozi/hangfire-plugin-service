@@ -1,12 +1,5 @@
-﻿using Hangfire;
-using Hangfire.Common;
-using Microsoft.Owin.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HangfireService
 {

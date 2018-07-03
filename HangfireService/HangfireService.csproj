@@ -116,10 +116,6 @@
       <Project>{c5649313-e8dd-4bbc-8814-1ae471b154d4}</Project>
       <Name>HangfireService.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HangfireService.Plugins\HangfireService.Plugins.csproj">
-      <Project>{02d384d0-c937-4e2b-9c90-540a2b333752}</Project>
-      <Name>HangfireService.Plugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using Hangfire;
 using Microsoft.Owin;
-using Hangfire.MemoryStorage;
 using Owin;
 
 [assembly: OwinStartup(typeof(HangfireService.OwinStartup))]
