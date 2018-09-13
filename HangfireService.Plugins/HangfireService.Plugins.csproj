@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnotherPlugin.cs" />
     <Compile Include="AWS\S3ClientFactory.cs" />
     <Compile Include="Model\Document.cs" />
     <Compile Include="Model\DocumentVersion.cs" />

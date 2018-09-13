@@ -80,6 +80,7 @@
     <Compile Include="Configuration\PluginHandlerConfigurationCollection.cs" />
     <Compile Include="Configuration\PluginHandlerConfigurationElement.cs" />
     <Compile Include="Configuration\PluginHandlerConfigurationSection.cs" />
+    <Compile Include="DoSomething.cs" />
     <Compile Include="HangfirePluginService.cs">
       <SubType>Component</SubType>
     </Compile>
